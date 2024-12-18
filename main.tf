@@ -27,3 +27,14 @@ module "security-groups" {
   vpc_id       = module.vpc.vpc_id
   project_name = module.vpc.project_name
 }
+
+module "rds" {
+  source            = "./modules/rds"
+  allocated_storage = var.allocated_storage
+  engine            = var.engine
+  engine_version    = var.engine_version
+  instance_class    = var.instance_class
+  project_name      = var.project_name
+  db_username       = var.db_username
+  db_password       = var.db_password
+}
