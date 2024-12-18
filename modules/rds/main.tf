@@ -1,5 +1,5 @@
 data "aws_secretsmanager_secret" "example" {
-  name = "rds_admin18"
+  name = "rds_admin18-12"
   depends_on = [
     aws_secretsmanager_secret.demo_secret_manager
   ]

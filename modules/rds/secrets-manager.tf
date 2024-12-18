@@ -7,7 +7,7 @@
 
 resource "aws_secretsmanager_secret" "demo_secret_manager" {
   kms_key_id              = aws_kms_key.demo_kms_key.key_id
-  name                    = "rds_admin18"
+  name                    = "rds_admin18-12"
   description             = "RDS Admin password"
   recovery_window_in_days = 14
   tags = {

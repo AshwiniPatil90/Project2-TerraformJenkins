@@ -4,7 +4,7 @@ pipeline {
         stage('Checkout from Git') { 
             steps {
                 echo "------before git checkout-----"
-                git branch: 'dev' , url: 'https://github.com/'
+                git branch: 'development' , url: 'https://github.com/AshwiniPatil90/Project2-TerraformJenkins.git'
             }
         }
         stage('Terraform version') { 
@@ -30,20 +30,24 @@ pipeline {
         }
         stage('Terraform Plan') { 
             steps {
+                withCredentials([file(credentialsId: 'dev-tfvars', variable: 'TFVARS_FILE')])
                 script {
-                    sh 'terraform plan'
+                    sh "terraform plan -var-file=$TFVARS_FILE"
                 }
             }
         }
         stage('Approve to Apply') { 
             steps {
-               input message: 'Approve to Apply', ok: 'Apply'
+               // Prompt for confirmation before applying changes
+                input message: "Do you want to apply the changes?", ok: "Proceed"
             }
         }
         stage('Terraform Apply') { 
             steps {
+                // Apply the Terraform configuration using the .tfvars file
+                withCredentials([file(credentialsId: 'dev-tfvars', variable: 'TFVARS_FILE')])
                 script {
-                    sh 'terraform apply --auto-approve'
+                    sh "terraform apply -var-file=$TFVARS_FILE -auto-approve"
                 }
             }
         }
@@ -54,10 +58,18 @@ pipeline {
         }
         stage('Terraform Destroy') { 
             steps {
+                // Destroy the Terraform configuration using the .tfvars file
+                withCredentials([file(credentialsId: 'dev-tfvars', variable: 'TFVARS_FILE')])
                 script {
-                    sh 'terraform destroy --auto-approve'
+                    sh 'terraform destroy -var-file=$TFVARS_FILE --auto-approve'
                 }
             }
+        }
+    }
+     post {
+        always {
+            // Clean up workspace to ensure the .tfvars file is not left behind
+            cleanWs()
         }
     }
 }

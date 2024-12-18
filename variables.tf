@@ -10,7 +10,9 @@ variable "engine" {}
 variable "engine_version" {}
 variable "instance_class" {}
 variable "db_username" {}
-variable "db_password" {}
+variable "db_password" {
+  sensitive = true
+}
 #variable "pri_sub_5a_cidr" {}
 #variable "pri_sub_6b_cidr" {}
 
